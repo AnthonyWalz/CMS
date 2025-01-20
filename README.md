@@ -97,3 +97,5 @@ The `orders` table stores details about completed orders.
     - General Settings
     - New/Edit Product
     - New/Edit Product Variation
+
+jsonb to json
