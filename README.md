@@ -89,6 +89,7 @@ The `orders` table stores details about completed orders.
 - Public
     - Main Page (having general products displayed)
     - Product Page
+    - Login/Signup
 - User
     - Cart
     - Orders
