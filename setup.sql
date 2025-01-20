@@ -76,3 +76,22 @@ CREATE TABLE orders (
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
+
+--Enable RLS for each table in public
+DO $$ 
+DECLARE 
+    r RECORD;
+BEGIN
+    -- Loop through all tables in the public schema
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') 
+    LOOP
+        -- Enable RLS for each table
+        EXECUTE 'ALTER TABLE public.' || quote_ident(r.tablename) || ' ENABLE ROW LEVEL SECURITY';
+    END LOOP;
+END $$;
+
+-- Create the policy to allow users to view only their own cart
+CREATE POLICY private_cart ON carts
+    FOR ALL
+    USING ((SELECT auth.uid() AS uid) = user_id)
+    WITH CHECK ((SELECT auth.uid() AS uid) = user_id);
