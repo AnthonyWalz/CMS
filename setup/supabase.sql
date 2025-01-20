@@ -7,13 +7,19 @@ BEGIN
     LOOP
         EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE';
     END LOOP;
+    
+        -- Drop all indexes except for users_pkey and users_email_key
+    FOR r IN (SELECT indexname FROM pg_indexes WHERE schemaname = 'public') 
+    LOOP
+        EXECUTE 'DROP INDEX IF EXISTS ' || quote_ident(r.indexname);
+    END LOOP;
 END $$;
 
 -- Users table
 CREATE TABLE users (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     name VARCHAR(255) NOT NULL,
-    address JSONB NOT NULL DEFAULT '[]'::JSONB,
+    address JSON NOT NULL DEFAULT '[]'::JSON,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
@@ -23,7 +29,10 @@ CREATE TABLE companies (
     name VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     phone VARCHAR(20) UNIQUE NOT NULL,
-    address TEXT UNIQUE NOT NULL,
+    address_line_1 TEXT,
+    address_line_2 TEXT,
+    address_line_3 TEXT,
+    address_line_4 TEXT,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -33,7 +42,7 @@ CREATE TABLE product_variations (
     id UUID PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    product_variation_tags JSONB NOT NULL DEFAULT '[]'::JSONB,
+    product_variation_tags JSON NOT NULL DEFAULT '[]'::JSON,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
@@ -47,7 +56,7 @@ CREATE TABLE products (
     stock INT,
     allow_negative_stock BOOLEAN NOT NULL DEFAULT FALSE,
     product_variation_id UUID REFERENCES product_variations(id) ON DELETE SET NULL ON UPDATE CASCADE,
-    product_variation_tags JSONB NOT NULL DEFAULT '[]'::JSONB,
+    product_variation_tags JSON NOT NULL DEFAULT '[]'::JSON,
     company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE ON UPDATE CASCADE,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
@@ -55,8 +64,8 @@ CREATE TABLE products (
 -- Carts table
 CREATE TABLE carts (
     id UUID PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    items JSONB NOT NULL DEFAULT '[]'::JSONB,
+    user_id UUID NOT NULL  UNIQUE REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    items JSON NOT NULL DEFAULT '[]'::JSON,
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
 
@@ -64,7 +73,7 @@ CREATE TABLE carts (
 CREATE TABLE orders (
     id UUID PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    items JSONB NOT NULL DEFAULT '[]'::JSONB,
+    items JSON NOT NULL DEFAULT '[]'::JSON,
     total DECIMAL(10, 2) NOT NULL CHECK (total >= 0),
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP NOT NULL DEFAULT now()
@@ -75,11 +84,13 @@ CREATE TABLE sub_orders (
     id UUID PRIMARY KEY,
     order_id UUID NOT NULL REFERENCES orders(id) ON DELETE CASCADE ON UPDATE CASCADE,
     company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    items JSONB NOT NULL DEFAULT '[]'::JSONB,
+    items JSON NOT NULL DEFAULT '[]'::JSON,
     total DECIMAL(10, 2) NOT NULL CHECK (total >= 0),
     status VARCHAR(50) NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP NOT NULL DEFAULT now()
 );
+
+
 
 --Enable RLS for each table in public
 DO $$ 
