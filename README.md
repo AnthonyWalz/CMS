@@ -83,3 +83,16 @@ The `orders` table stores details about completed orders.
 - Each product variation can contain multiple products (`product_variation_id` in `products`).
 - Each user can have one shopping cart (`user_id` in `carts`).
 - Each user can place multiple orders (`user_id` in `orders`).
+
+## Website Areas
+
+- Public
+    - Main Page (having general products displayed)
+    - Product Page
+- User
+    - Cart
+    - Orders
+- Admin
+    - General Settings
+    - New/Edit Product
+    - New/Edit Product Variation
