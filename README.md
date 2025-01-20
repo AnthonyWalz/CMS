@@ -83,9 +83,3 @@ The `orders` table stores details about completed orders.
 - Each product variation can contain multiple products (`product_variation_id` in `products`).
 - Each user can have one shopping cart (`user_id` in `carts`).
 - Each user can place multiple orders (`user_id` in `orders`).
-
-## Setup Instructions
-
-1. Create the database schema by running the SQL scripts.
-2. Ensure that foreign keys are properly enforced and referential integrity is maintained.
-3. You can extend this schema by adding additional features like payments, shipping, or user roles.
