@@ -76,7 +76,9 @@
     </div>
     {% capture script %}{% include "./public/script/main.js" %}{% endcapture %}
     {{ script | wrap: "script", "script" }}
+    {% capture script %}{% include "./supabase.js" %}{% endcapture %}
+    {{ script | wrap: "script type='module'", "" }}
     {% capture script %}{% include "./public/script-module/main.js" %}{% endcapture %}
-    {{ script | wrap: "script type='module'", "script" }}
+    {{ script | wrap: "", "script" }}
 </body>
 </html>

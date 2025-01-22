@@ -5,23 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Merchant Admin Dashboard</title>
     <style>
-        /* Reset some default styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Body and general styling */
+        /* General Styling */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f7fa;
             color: #333;
         }
 
-        /* Header styles */
         header {
-            background-color: #4CAF50; /* Green color */
+            background-color: #4CAF50;
             color: white;
             padding: 20px;
             display: flex;
@@ -29,403 +21,284 @@
             align-items: center;
         }
 
-        header .logo {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        header .logo h1 {
-            font-size: 24px;
-        }
-
-        header .dropdown {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
         .dropdown button {
             background-color: #4CAF50;
             color: white;
             border: none;
-            padding: 8px 15px;
+            padding: 10px 20px;
+            font-size: 20px;
             cursor: pointer;
             border-radius: 5px;
-            font-size: 20px; /* Increased button text size */
-            min-width: 200px; /* Made the button wider */
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            width: 200px;
+        }
+
+        .dropdown-content a {
+            padding: 12px 16px;
+            display: block;
+            color: black;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
         }
 
         .dropdown:hover .dropdown-content {
             display: block;
         }
 
-        .dropdown .dropdown-content {
+        .user-info p {
+            font-size: 18px;
+        }
+
+        .modal {
             display: none;
-            position: absolute;
-            background-color: white;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+            position: fixed;
             z-index: 1;
-            border-radius: 5px;
-            max-height: 300px;
-            overflow-y: auto;
+            left: 0;
+            top: 0;
             width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
         }
 
-        .dropdown .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 18px; /* Increased text size */
-        }
-
-        .dropdown .dropdown-content a:hover {
-            background-color: #ddd;
-        }
-
-        .dropdown .dropdown-content a:last-child {
-            font-weight: bold;
-            color: #4CAF50;
-        }
-
-        header nav ul {
-            list-style-type: none;
-            display: flex;
-        }
-
-        header nav ul li {
-            margin: 0 15px;
-        }
-
-        header nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        header .user-info {
-            text-align: right;
-        }
-
-        header .user-info p {
-            margin-bottom: 5px;
-        }
-
-        header .user-info button {
-            background-color: #f44336; /* Red for logout */
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        header .user-info button:hover {
-            background-color: #d32f2f;
-        }
-
-        /* Main content area */
-        main {
-            padding: 20px;
-        }
-
-        /* Section titles */
-        h2 {
-            color: #333;
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        /* Dashboard Overview */
-        .overview p {
-            font-size: 18px;
-            margin: 10px 0;
-        }
-
-        /* Table styling */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f4f7fa;
-            color: #555;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        /* Product List */
-        .product-list {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .product {
+        .modal-content {
             background-color: white;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px;
-            width: 200px;
-            text-align: center;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
         }
 
-        .product img {
-            max-width: 100%;
-            border-radius: 5px;
-            margin-bottom: 10px;
+        .modal-content h2 {
+            margin-bottom: 20px;
         }
 
-        .product p {
-            font-size: 18px;
-            margin-bottom: 10px;
+        .modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
         }
 
-        .product button {
-            margin-top: 5px;
-        }
-
-        /* Form Styling in Settings */
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        form label {
-            font-size: 18px;
-            color: #333;
-        }
-
-        form input[type="text"],
-        form input[type="email"] {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .modal-content input {
             width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
         }
 
-        form button {
+        .modal-content button {
             background-color: #4CAF50;
             color: white;
-            padding: 12px 20px;
+            padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            font-size: 18px;
             cursor: pointer;
+            font-size: 18px;
         }
 
-        form button:hover {
+        .modal-content button:hover {
             background-color: #45a049;
         }
 
-        /* Footer styling */
-        footer {
-            text-align: center;
-            padding: 20px;
-            background-color: #f1f1f1;
-            margin-top: 40px;
+        .close {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <div class="dropdown">
-                <button id="companyButton">Company 1</button>
-                <div class="dropdown-content">
-                    <a href="#" onclick="selectCompany('Company 1')">Company 1</a>
-                    <a href="#" onclick="selectCompany('Company 2')">Company 2</a>
-                    <a href="#" onclick="selectCompany('Company 3')">Company 3</a>
-                    <a href="#" onclick="selectCompany('+ Create New Company')">+ Create New Company</a>
-                </div>
-            </div>
+
+<header>
+    <div class="dropdown">
+        <button id="companyButton"></button>
+        <div id="companyButtonDropDown" class="dropdown-content">
         </div>
-        <nav>
-            <ul>
-                <li><a href="#dashboard">Dashboard</a></li>
-                <li><a href="#orders">Orders</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#settings">Settings</a></li>
-            </ul>
-        </nav>
-        <div class="user-info">
-            <p id="welcomeMessage">Welcome, Admin</p>
-            <button>Logout</button>
-        </div>
-    </header>
+    </div>
+    <div class="user-info">
+        <p id="welcomeMessage">Welcome, Admin</p>
+    </div>
+</header>
 
-    <main>
-        <section id="dashboard">
-            <h2>Dashboard</h2>
-            <div class="overview">
-                <p>Total Sales: $5,000</p>
-                <p>Orders Today: 50</p>
-                <p>Products in Stock: 120</p>
-            </div>
-        </section>
+<!-- Create New Company Modal -->
+<div id="createCompanyModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCreateCompanyModal()">&times;</span>
+        <h2>Create New Company</h2>
+        <form id="createCompanyForm">
+            <label for="companyName">Company Name</label>
+            <input type="text" id="companyName" required>
 
-        <section id="orders">
-            <h2>Orders</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>#1001</td>
-                        <td>John Doe</td>
-                        <td>Shipped</td>
-                        <td>01/19/2025</td>
-                    </tr>
-                    <tr>
-                        <td>#1002</td>
-                        <td>Jane Smith</td>
-                        <td>Pending</td>
-                        <td>01/20/2025</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+            <label for="companyEmail">Email</label>
+            <input type="email" id="companyEmail" required>
 
-        <section id="products">
-            <h2>Products</h2>
-            <div class="product-list">
-                <div class="product">
-                    <img src="product-image.jpg" alt="Mint Soap">
-                    <p>Mint Soap</p>
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </div>
-                <div class="product">
-                    <img src="product-image.jpg" alt="Lavender Soap">
-                    <p>Lavender Soap</p>
-                    <button>Edit</button>
-                    <button>Delete</button>
-                </div>
-            </div>
-        </section>
+            <label for="companyPhone">Phone</label>
+            <input type="text" id="companyPhone" required>
 
-        <section id="settings">
-            <h2>Settings</h2>
-            <form>
-                <label for="store-name">Store Name:</label>
-                <input type="text" id="store-name" name="store-name" value="Wildman Soap">
-                
-                <label for="store-email">Store Email:</label>
-                <input type="email" id="store-email" name="store-email" value="contact@wildmansoap.com">
+            <label for="companyAddress1">Address Line 1</label>
+            <input type="text" id="companyAddress1">
 
-                <button type="submit">Save Changes</button>
-            </form>
-        </section>
-    </main>
+            <label for="companyAddress2">Address Line 2</label>
+            <input type="text" id="companyAddress2">
 
-    <footer>
-        <p>&copy; 2025 Wildman Soap</p>
-    </footer>
+            <label for="companyAddress3">Address Line 3</label>
+            <input type="text" id="companyAddress3">
 
-    <script>
-        // Retrieve the email from localStorage and display it in the welcome message
-        /*
-        window.onload = function() {
-            var session = JSON.parse(localStorage.getItem('supabaseUser'));
-            var user = session.user;
-            var welcomeMessage = document.getElementById('welcomeMessage');
+            <label for="companyAddress4">Address Line 4</label>
+            <input type="text" id="companyAddress4">
             
-            if (user && user.email) {
-                welcomeMessage.textContent = "Welcome, " + user.email;
-            } else {
-                welcomeMessage.textContent = "Welcome, test";
-            }
+            <input type="submit" value="Create Company">
+        </form>
+    </div>
+</div>
 
-            // Set default company when page loads
-            selectCompany('Company 1');
+<script>
+
+    // Retrieve and display email from local storage
+    window.onload = function () {
+        var data = JSON.parse(localStorage.getItem('sb-jujsidzudoqlljbabqjd-auth-token'));
+        var user = data.user;
+        var welcomeMessage = document.getElementById('welcomeMessage');
+
+        if (user && user.email) {
+            welcomeMessage.textContent = "Welcome, " + user.email;
+        } else {
+            welcomeMessage.textContent = "Welcome, Admin";
+        }
+
+        // Set default company
+        selectCompany('Company 1');
+    };
+
+    function selectCompany(companyName) {
+        document.getElementById('companyButton').textContent = companyName;
+    }
+
+    function showCreateCompanyModal() {
+        document.getElementById('createCompanyModal').style.display = 'block';
+    }
+
+    function closeCreateCompanyModal() {
+        document.getElementById('createCompanyModal').style.display = 'none';
+    }
+
+    // Close modal if clicking outside of content
+    window.onclick = function (event) {
+        const modal = document.getElementById('createCompanyModal');
+        if (event.target === modal) {
+            closeCreateCompanyModal();
+        }
+    };
+</script>
+<script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabaseUrl = 'https://jujsidzudoqlljbabqjd.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1anNpZHp1ZG9xbGxqYmFicWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczNDg4MzUsImV4cCI6MjA1MjkyNDgzNX0.YpBU16MXP4jNyvQynwJzhV1h5AoNnClp17GqyPipxaI';
+    const options = {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true
+    },
+}
+const supabase = createClient(supabaseUrl, supabaseKey, options);
+
+    document.getElementById('createCompanyForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+        var userdata = JSON.parse(localStorage.getItem('sb-jujsidzudoqlljbabqjd-auth-token'));
+        var user = userdata.user;
+        if (!user || !user.id) {
+            console.log(JSON.stringify(user));
+            alert('User not authenticated.');
+            return;
+        }
+
+        const companyData = {
+            id: crypto.randomUUID(),
+            name: document.getElementById('companyName').value,
+            email: document.getElementById('companyEmail').value,
+            phone: document.getElementById('companyPhone').value,
+            address_line_1: document.getElementById('companyAddress1').value,
+            address_line_2: document.getElementById('companyAddress2').value,
+            address_line_3: document.getElementById('companyAddress3').value,
+            address_line_4: document.getElementById('companyAddress4').value,
+            user_id: user.id,
+            created_at: new Date().toISOString()
         };
-        function selectCompany(companyName) {
-            document.getElementById('companyButton').textContent = companyName;
-        */
-    </script>
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+        console.log(JSON.stringify(companyData));
+        const { data, error } = await supabase.from('companies').insert([companyData]);
 
-// Supabase Config
-const supabaseUrl = 'https://jujsidzudoqlljbabqjd.supabase.co';
-const supabaseKey = 'your-supabase-key';  // Replace with your actual Supabase key
-const supabase = createClient(supabaseUrl, supabaseKey);
+        if (error) {
+            alert('Error creating company: ' + error.message);
+        } else {
+            alert('Company created successfully!');
+            closeCreateCompanyModal();
+            selectCompany(companyData.name);
+        }
+    });
+    async function fetchUserCompanies() {
+    try {
+        // Get the currently authenticated user
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
 
-// Function to check session on page load
-const checkSession = async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
+        if (authError) throw authError;
 
-    if (user) {
-        console.log('User session found:', user);
-        //localStorage.setItem('supabaseUser', JSON.stringify(user));
-    } else {
-        console.log('No active session. Please log in.');
-        //localStorage.removeItem('supabaseUser');
+        if (!user) {
+            console.log('No user is logged in.');
+            return;
+        }
+
+        // Query the companies table where user_id matches the logged-in user's ID
+        const { data, error } = await supabase
+            .from('companies')
+            .select('*')
+            .eq('user_id', user.id);  // Filter by the user's ID
+
+        if (error) {
+            throw error;
+        }
+        console.log(JSON.stringify(data.length));
+        if(data.length == 0){
+            document.getElementById('companyButton').innerHTML = "+ Create New Company";
+            document.getElementById('companyButtonDropDown').innerHTML = "";
+            showCreateCompanyModal();
+        }else{
+            document.getElementById('companyButton').innerHTML = data[0].name;
+            var dropdown = "";
+            if(data.length > 1){
+                for(var i = 1; i<data.length; i++){
+                    dropdown += "<a href=\"#\" onclick=\"selectCompany('"+data[i].id+"')\">"+data[i].name+"</a>";
+                }
+            }
+            dropdown += '<a href="#" onclick="showCreateCompanyModal()">+ Create New Company</a>';
+            document.getElementById('companyButtonDropDown').innerHTML = dropdown;
+            /*
+            <a href="#" onclick="selectCompany('Company 1')">Company 1</a>
+            <a href="#" onclick="selectCompany('Company 2')">Company 2</a>
+            <a href="#" onclick="showCreateCompanyModal()">+ Create New Company</a>
+            */
+        }
+        console.log('User Companies:', data);
+    } catch (err) {
+        console.error('Error fetching companies:', err.message);
     }
-};
+}
 
-// Function to renew the session every 45 minutes
-const renewSession = async () => {
-    const { data: { session }, error } = await supabase.auth.refreshSession();
-    if (error) {
-        console.error('Error renewing session:', error);
-    } else {
-        console.log('Session renewed:', session);
-    }
-};
+// Call the function to fetch companies for the current user
+fetchUserCompanies();
+</script>
 
-// Check session on page load
-window.onload = checkSession;
-
-// Set an interval to renew the session every 45 minutes (2700000 ms)
-setInterval(renewSession, 2700000);
-    </script>
-
-    
 </body>
 </html>
