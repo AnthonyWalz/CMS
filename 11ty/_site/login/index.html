@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup Page</title>
+    
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f9;
+}
+
+.container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group input[type="password"] {
+    margin-top: 5px;
+}
+
+.form-group input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 12px;
+    width: 100%;
+    border-radius: 4px;
+}
+
+.form-group input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.toggle-form {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.toggle-form a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.toggle-form a:hover {
+    text-decoration: underline;
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.forgot-password a {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}</style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="login">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <div class="forgot-password">
+                    <a href="javascript:void(0);" onclick="showForgotPasswordForm()">Forgot Password?</a>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+            <div class="toggle-form">
+                <p>Don't have an account? <a href="javascript:void(0);" onclick="toggleForm()">Sign Up</a></p>
+            </div>
+        </div>
+
+        <div id="signup" style="display:none;">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" name="confirm-password" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Sign Up">
+                </div>
+            </form>
+            <div class="toggle-form">
+                <p>Already have an account? <a href="javascript:void(0);" onclick="toggleForm()">Login</a></p>
+            </div>
+        </div>
+
+        <div id="forgot-password" style="display:none;">
+            <h2>Forgot Password</h2>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <label for="forgot-email">Enter your email</label>
+                    <input type="email" id="forgot-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Send Reset Link">
+                </div>
+            </form>
+            <div class="toggle-form">
+                <p>Remembered your password? <a href="javascript:void(0);" onclick="showLoginForm()">Login</a></p>
+            </div>
+        </div>
+        <div><a href="/admin">admin link</a></div>
+    </div>
+    
+    <script>
+// Toggle between login and signup forms
+function toggleForm() {
+    var loginForm = document.getElementById('login');
+    var signupForm = document.getElementById('signup');
+
+    if (loginForm.style.display === 'none') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+    } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+    }
+}
+// Show forgot password form
+function showForgotPasswordForm() {
+    var loginForm = document.getElementById('login');
+    var forgotPasswordForm = document.getElementById('forgot-password');
+
+    loginForm.style.display = 'none';
+    forgotPasswordForm.style.display = 'block';
+}
+
+// Show login form
+function showLoginForm() {
+    var forgotPasswordForm = document.getElementById('forgot-password');
+    var loginForm = document.getElementById('login');
+
+    forgotPasswordForm.style.display = 'none';
+    loginForm.style.display = 'block';
+}</script>
+    
+    <script type='module'>
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+const supabaseUrl = 'https://jujsidzudoqlljbabqjd.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1anNpZHp1ZG9xbGxqYmFicWpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzczNDg4MzUsImV4cCI6MjA1MjkyNDgzNX0.YpBU16MXP4jNyvQynwJzhV1h5AoNnClp17GqyPipxaI';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+document.getElementById('login-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+    if (error) {
+        alert(error.message);
+    } else {
+        // Save user to session storage
+        //localStorage.setItem('supabaseUser', JSON.stringify(data));
+        alert('Logged in successfully!');
+        // Redirect or handle logged-in state here
+    }
+    //} catch (err) {
+    //console.error('Unexpected Error:', err);
+    //alert('An unexpected error occurred. Please try again.');
+    //}
+});
+
+// Handle signup form submit
+document.getElementById('signup-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+
+    try {
+        const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        });
+
+        if (error) {
+            alert(`Error: ${error.message}`);
+        } else {
+            // Save user to session storage
+            //localStorage.setItem('supabaseUser', JSON.stringify(data));
+            alert('Signup successful! Check your email for confirmation.');
+        }
+    } catch (err) {
+        console.error('Unexpected Error:', err);
+        alert('An unexpected error occurred. Please try again.');
+    }
+});
+
+// Handle forgot password form submit
+document.getElementById('forgot-password-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('forgot-email').value;
+
+    try {
+        const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+
+        if (error) {
+            alert(error.message);
+        } else {
+            alert('Password reset link sent!');
+            // Redirect or show message after reset link is sent
+        }
+    } catch (err) {
+        console.error('Unexpected Error:', err);
+        alert('An unexpected error occurred. Please try again.');
+    }
+});</script>
+</body>
+</html>

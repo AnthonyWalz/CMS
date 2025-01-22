@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Signup Page</title>
+    {% capture css %}{% include "./public/main.css" %}{% endcapture %}
+    {{ css | wrap: "style", "style" }}
+</head>
+<body>
+
+    <div class="container">
+        <div id="login">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" name="password" required>
+                </div>
+                <div class="forgot-password">
+                    <a href="javascript:void(0);" onclick="showForgotPasswordForm()">Forgot Password?</a>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Login">
+                </div>
+            </form>
+            <div class="toggle-form">
+                <p>Don't have an account? <a href="javascript:void(0);" onclick="toggleForm()">Sign Up</a></p>
+            </div>
+        </div>
+
+        <div id="signup" style="display:none;">
+            <h2>Sign Up</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm-password">Confirm Password</label>
+                    <input type="password" id="signup-confirm-password" name="confirm-password" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Sign Up">
+                </div>
+            </form>
+            <div class="toggle-form">
+                <p>Already have an account? <a href="javascript:void(0);" onclick="toggleForm()">Login</a></p>
+            </div>
+        </div>
+
+        <div id="forgot-password" style="display:none;">
+            <h2>Forgot Password</h2>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <label for="forgot-email">Enter your email</label>
+                    <input type="email" id="forgot-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Send Reset Link">
+                </div>
+            </form>
+            <div class="toggle-form">
+                <p>Remembered your password? <a href="javascript:void(0);" onclick="showLoginForm()">Login</a></p>
+            </div>
+        </div>
+        <div><a href="/admin">admin link</a></div>
+    </div>
+    {% capture script %}{% include "./public/script/main.js" %}{% endcapture %}
+    {{ script | wrap: "script", "script" }}
+    {% capture script %}{% include "./public/script-module/main.js" %}{% endcapture %}
+    {{ script | wrap: "script type='module'", "script" }}
+</body>
+</html>
